@@ -17,6 +17,9 @@ package com.cognitree.flume.sink.elasticsearch;
 
 import org.apache.flume.Context;
 import org.apache.flume.Event;
+import org.apache.flume.formatter.output.BucketPath;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
@@ -28,6 +31,12 @@ import static com.cognitree.flume.sink.elasticsearch.Constants.*;
  * This class create the index type and Id based on header
  */
 public class HeaderBasedIndexBuilder extends StaticIndexBuilder {
+
+    public HeaderBasedIndexBuilder(){
+        logger.info("初始化。。。。");
+    }
+
+    private static final Logger logger = LoggerFactory.getLogger(HeaderBasedIndexBuilder.class);
 
     /**
      * Returns the index name from the headers
@@ -56,6 +65,7 @@ public class HeaderBasedIndexBuilder extends StaticIndexBuilder {
         } else {
             type = super.getType(event);
         }
+        type=BucketPath.escapeString(type,headers);
         return type;
     }
 
